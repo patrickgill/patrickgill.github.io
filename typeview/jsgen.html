@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/overwrite.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+<script>
+window.onload=function() {
+  settextfield()
+}
+
+function gen(amount)
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < amount; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function settextfield() {
+  var textoutput = document.querySelector('#textoutput');
+
+  // textContent
+  textoutput.innerText = gen(1600);
+}
+
+var repeatvar
+
+function repeatgen(){
+    settextfield();
+
+    // setTimeout(yourFunction, 200);
+
+
+
+    // myVar = setTimeout(function(){ alert("Hello"); }, 3000);
+    repeatvar = setTimeout(repeatgen, 30);
+
+}
+
+function stoprepeatgen() {
+    clearTimeout(repeatvar);
+}
+
+</script>
+
+<style>
+
+</style>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="row" style="margin-top: 2%">
+        <h4>overwrite</h4>
+        <form onsubmit="return false;">
+          <!-- <input type="text" id="fonturl" placeholder="URL" /> -->
+          <input type="submit" value="Generate" onclick="repeatgen()" />
+          <input type="button" value="Stop" onclick="stoprepeatgen()" />
+        </form>
+        <span id="textoutput" class="overwrite"></span>
+        <p></p>
+    </div>
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

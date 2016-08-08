@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>type viewer</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> -->
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/emoji-font.css">
+  <link rel="stylesheet" href="css/typetest.css">  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+</head>
+<body>
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+var input = document.querySelector('#textinput');
+var textoutput = document.querySelector('#textoutput');
+
+// textoutput.innerText = input.value;
+
+input.addEventListener('input', function() {
+    // textContent
+    textoutput.innerText = input.value;
+});
+}//]]>
+
+function newfont() {
+	var fonturl = document.querySelector('#fonturl').value;
+
+	var f = new FontFace("dynamicfont", "url('"+fonturl+"')", {});
+	f.load().then(function (loadedFace) {
+	  document.fonts.add(loadedFace);
+	  document.getElementById("textoutput").style.fontFamily = "dynamicfont";
+	});
+	// alert (fonturl);
+}
+
+function resizeText(fontvar) {
+	var element = document.getElementById("textoutput");
+    var size = element.style.fontSize.replace("px", "");
+	var textsize = document.getElementById("textoutput").style.fontSize;
+
+    // alert ("size: "+textsize);
+    element.style.fontSize = parseInt(size) + parseInt(fontvar) + "px";
+}
+</script>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<br />
+<div class="container">
+    <div class="row">
+      <h4>Type tester</h4>
+      <textarea type="text" id="textinput" value="" placeholder="Hello" autofocus /></textarea>
+    </div>
+    <div class="row">
+    	<form onsubmit="return false;">
+	      <input type="text" id="fonturl" placeholder="URL" />
+	      <input type="submit" value="New font" onclick="newfont()" />
+	      <input type="button" value="+" onclick="resizeText(1)" />
+	      <input type="button" value="-" onclick="resizeText(-1)" />
+      </form>
+    </div>
+	<div class="row">
+		<span id="textoutput" class="dynamicfont" style="font-size: 32px;"></span>
+	</div>
+</div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
