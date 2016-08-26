@@ -1,0 +1,89 @@
+<!-- 
+upload pic
+show pic in div
+search button
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Image upload</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> -->
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/imagesearch.css">  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+<script type='text/javascript'>//<![CDATA[
+window.onload=function(){
+  // var input = document.querySelector('#textinput');
+  // var textoutput = document.querySelector('#textoutput');
+
+  // input.addEventListener('input', function() {
+  //     // textContent
+  //     textoutput.innerText = input.value;
+  //     setcanvas(input.value);
+  // });
+
+}//]]>
+
+function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#theimage')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<br />
+<div class="container">
+    <div class="row">
+      <h4>Image upload 🤖</h4>
+    	<img id="theimage" src="#" alt="" />
+    </div>
+    <div>
+      <form onsubmit="return false;">
+        <input type="file" name="filename" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />
+        <!-- <input class="button-primary" type="submit" value="Upload" onclick="readURL()" /> -->
+      </form>
+    </div>
+  <div class="row" class="bordered">
+  </div>
+</div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
