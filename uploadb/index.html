@@ -17,7 +17,7 @@ https://images.google.com/
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
 
-    <title>Image upload 🤖</title>
+    <title>Image upload</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -31,21 +31,20 @@ https://images.google.com/
   </head>
 
   <body>
-  
+
     <!-- Begin page content -->
-    <div class="container">
-      <div class="page-header">
-        <h1>Image upload 🤖</h1>
+    <div class="container-fluid">
+      <div class="row center-block">
+        <h2>Image upload <span class="doubleclick">🤖</span></h2>
       </div>
-      <div class="row">
-        <img id="theimage" class="item-size" src="#" alt="Image" hidden />
+      <div class="row" id="imagerow" hidden>
+        <img id="theimage" class="center-block img-responsive" src="#" alt="Image" />
       </div>
-      <div class="row-fluid">
-        <div class="fileUpload btn btn-primary text-center">
-          <div class="text-center">
-            <span class="btn btn-file">Upload</span><!-- btn-primary  -->
-            <input type="file" class="upload" name="filename" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />
-          </div>
+      <div class="row center-block" id="uploadrow">
+        <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+        <div class="fileUpload btn btn-primary">
+          <span>Upload</span>
+          <input id="uploadBtn" type="file" class="upload" name="filename" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />
         </div>
       </div>
     </div>
@@ -56,18 +55,9 @@ https://images.google.com/
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
     <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
     <script src="js/bootstrap.min.js"></script>
-    <script type='text/javascript'>//<![CDATA[
+    <script type='text/javascript'>
       window.onload=function(){
-        // var input = document.querySelector('#textinput');
-        // var textoutput = document.querySelector('#textoutput');
-
-        // input.addEventListener('input', function() {
-        //     // textContent
-        //     textoutput.innerText = input.value;
-        //     setcanvas(input.value);
-        // });
-
-      }//]]>
+      }
 
       function readURL(input) {
         if (input.files && input.files[0]) {
@@ -77,13 +67,24 @@ https://images.google.com/
           $('#theimage')
             .attr('src', e.target.result)
             .show()
-            // .width(150)
-            // .height(200);
           };
 
           reader.readAsDataURL(input.files[0]);
+
+          $('#imagerow').show()
+
+          document.getElementById("uploadFile").value = document.getElementById("uploadBtn").value;
         }
       }
+
+      // document.getElementById("uploadBtn").onchange = function () {
+      //   document.getElementById("uploadFile").value = this.value;
+      // };
+
+      $( ".doubleclick" ).dblclick(function() {
+        alert( "Handler for .dblclick() called." );
+      });
+
     </script>
   </body>
 </html>

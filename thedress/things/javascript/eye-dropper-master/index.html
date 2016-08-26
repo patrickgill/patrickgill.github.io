@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Eye Dropper</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+  <script src="script.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34417586-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+</head>
+<body>
+  <!-- <div class="vertical-center"> -->
+    <div id="intro">
+      Paste the image you want to inspect.
+      <p id="desc">Then mouse over the image to get the color code.</p>
+      <p><a href="https://twitter.com/share" class="twitter-share-button" data-text="Eye dropper tool on the web." data-via="kentor">Tweet</a></p>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </div>
+  <!-- </div> -->
+
+  <div id="info">
+    <div id="hover" class="color-info">
+      <div id="color-hover" class="color-preview"></div>
+      hovering<br>
+      <label for="rgb-hover">rgb</label> <input type="text" size="11" id="rgb-hover" name="rgb-hover"><br>
+      <label for="hex-hover">hex</label> <input type="text" size="11" id="hex-hover" name="hex-hover">
+    </div>
+    <div id="saved" class="color-info">
+      <div id="color-saved" class="color-preview"></div>
+      locked (mouse 2)<br>
+      <label for="rgb-saved">rgb</label> <input type="text" size="11" id="rgb-saved" name="rgb-saved"><br>
+      <label for="hex-saved">hex</label> <input type="text" size="11" id="hex-saved" name="hex-saved">
+    </div>
+    <div id="zoomer">
+      <div id="coord"></div>
+      <canvas id="zoomed"></canvas>
+      <canvas id="crosshair" width="11px" height="11px"></canvas>
+    </div>
+  </div>
+
+  <div id="board">
+    <canvas id="source"></canvas>
+  </div>
+</body>
+</html>
