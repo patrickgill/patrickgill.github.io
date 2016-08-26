@@ -1,9 +1,7 @@
 var canvas;
 var ctx;
 
-var images = [ // predefined array of used images
-    'thedress.jpg',
-];
+var images = ['thedress.jpg'];
 var iActiveImage = 0;
 
 $(function(){

@@ -23,7 +23,21 @@ body {
     /* width:730px; */
 }
 
-.column1 {
+
+#theimage {
+  /*display:table;*/
+  /*width: 100%;*/
+  /*max-width:100%*/
+  /*height: auto;*/
+
+  height:90%; /*Ensure the width scales to the width of the parent container*/
+  width:auto; /* Not required, but sometimes is nice to ensure the width not being overridden by other factors like browser quirks */
+  /*height: auto;*/
+
+  /*cursor:crosshair;*/
+}
+
+.theimage {
     display: block;
     margin-left: auto;
     margin-right: auto;
