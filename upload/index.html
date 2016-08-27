@@ -36,12 +36,15 @@ https://images.google.com/
 
     <!-- Begin page content -->
     <div class="container-fluid">
+    
       <div class="row center-block">
         <h2>Image upload <span class="doubleclick">🤖</span></h2>
       </div>
+
       <div class="row" id="imagerow" hidden>
         <img id="theimage" class="center-block img-responsive" src="#" alt="Image" />
       </div>
+
       <div class="row center-block" id="uploadrow">
         <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
         <div class="fileUpload btn btn-primary">
@@ -49,6 +52,7 @@ https://images.google.com/
           <input id="uploadBtn" type="file" class="upload" name="filename" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />
         </div>
       </div>
+
     </div>
 
     <!-- Bootstrap core JavaScript
@@ -84,7 +88,8 @@ https://images.google.com/
       // };
 
       $( ".doubleclick" ).dblclick(function() {
-        alert( "Handler for .dblclick() called." );
+        // alert( "Handler for .dblclick() called." );
+        $( "#uploadBtn" ).trigger( "click" );
       });
 
     </script>
