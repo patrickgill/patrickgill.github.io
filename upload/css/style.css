@@ -25,6 +25,9 @@ hr {
   max-width:100%; /*Ensure the width scales to the width of the parent container*/
   width:auto; /* Not required, but sometimes is nice to ensure the width not being overridden by other factors like browser quirks */
   height: auto;
+
+  padding-right: 14px;
+  padding-left: 14px;
 }
 
 input[type='file'] {
@@ -59,7 +62,10 @@ input[type='file'] {
   -ms-user-select: none;       /* Internet Explorer/Edge */
   user-select: none;           /* Non-prefixed version, currently
                                   not supported by any browser */
-  
+}
+
+.defaultcursor {
   -webkit-user-select: none;
-  cursor:default;
+  /*cursor: pointer;*/
+  cursor: default;
 }

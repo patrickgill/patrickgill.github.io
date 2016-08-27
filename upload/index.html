@@ -20,7 +20,6 @@ https://images.google.com/
     <link rel="icon" href="favicon.ico">
 
     <title>Image upload</title>
-
     <!-- Bootstrap core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -36,24 +35,33 @@ https://images.google.com/
 
     <!-- Begin page content -->
     <div class="container-fluid">
-    
-      <div class="row center-block">
-        <h2>Image upload <span class="doubleclick">🤖</span></h2>
+
+      <div id="header" class="row center-block">
+        <h2 class="defaultcursor">Image upload <span class="doubleclick">🤖</span></h2>
+        <span>Select an image for reverse image searching</span>
       </div>
 
-      <div class="row" id="imagerow" hidden>
-        <img id="theimage" class="center-block img-responsive" src="#" alt="Image" />
+      <div class="row hidden" id="imagerow">
+        <img id="theimage" class="doubleclick center-block img-responsive" src="#" alt="Image" />
       </div>
 
       <div class="row center-block" id="uploadrow">
-        <input id="uploadFile" placeholder="Choose File" disabled="disabled" />
+        <!-- <input id="uploadFile" placeholder="Choose File" disabled="disabled" /> -->
         <div class="fileUpload btn btn-primary">
           <span>Upload</span>
           <input id="uploadBtn" type="file" class="upload" name="filename" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />
         </div>
+        <!-- <span id="uploadFile">Filename</span> -->
+      </div>
+
+      <div class="row center-block hidden" id="searchrow"> 
+        <button id="searchBtn" name="singlebutton" class="btn btn-primary"  onchange="search();" />Search</button> 
       </div>
 
     </div>
+
+    <footer>
+    </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -77,9 +85,14 @@ https://images.google.com/
 
           reader.readAsDataURL(input.files[0]);
 
-          $('#imagerow').show()
+          $("#imagerow").removeClass('hidden');
+          $("#searchrow").removeClass('hidden');
 
-          document.getElementById("uploadFile").value = document.getElementById("uploadBtn").value;
+          // document.getElementById("uploadFile").value = document.getElementById("uploadBtn").value;
+          var Filename = document.getElementById("uploadBtn").value.split('/').pop().split('\\').pop();
+          // document.getElementById("uploadFile").value = Filename;
+          // $("#uploadFile").text(Filename);
+          $("#theimage").prop("alt", Filename);
         }
       }
 
