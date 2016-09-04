@@ -122,13 +122,12 @@ document.addEventListener("touchend", function (e) {
 }, false);
 
 document.addEventListener("touchmove", function (e) {
-  var touch = e.touches[0];
+  // var touch = e.touches[0];
   // var mouseEvent = new MouseEvent("mousemove", {
   //   clientX: touch.clientX,
   //   clientY: touch.clientY
   // });
-
-  $('#touch').text(e.touches.length);
+  // document.dispatchEvent(mouseEvent);
 
   for(var i=0; i < e.touches.length; i++) {
       var touchId = e.touches[i].identifier;
@@ -143,7 +142,7 @@ document.addEventListener("touchmove", function (e) {
       }
   }
 
-  // document.dispatchEvent(mouseEvent);
+  $('#touch').text(e.touches.length);
 }, false);
 
 // Get the position of a touch relative to the canvas
