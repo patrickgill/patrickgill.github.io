@@ -1,0 +1,76 @@
+<!-- 
+upload pic
+http://jsbin.com/uboqu3/1/edit?html,js,output
+
+show pic in div
+search
+https://images.google.com/
+
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Scrape links</title>
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Begin page content -->
+    <div class="container-fluid">
+
+      <div id="header" class="row center-block">
+        <h2 class="defaultcursor">Image upload <span class="doubleclick">🤖</span></h2><small>Select an image for reverse image searching</small>
+      </div>
+
+      <div class="row hidden" id="imagerow">
+        <img id="theimage" class="doubleclick center-block img-responsive" src="#" alt="Image" />
+      </div>
+
+      <div class="row center-block" id="uploadrow">
+        <!-- <input id="uploadFile" placeholder="Choose File" disabled="disabled" /> -->
+        <div class="fileUpload btn btn-primary">
+          <span>Upload</span>
+          <input id="uploadBtn" type="file" class="upload" name="filename" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />
+        </div>
+        <span id="uploadFile"></span>
+      </div>
+
+      <div class="row center-block hidden" id="searchrow"> 
+        <button id="searchBtn" name="singlebutton" class="btn btn-primary"  onchange="search();" />Search</button> 
+      </div>
+
+    </div>
+
+    <footer>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <script>window.jQuery || document.write('<script src="../js/jquery.min.js"><\/script>')</script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="js/upload.js"></script>
+
+
+    </script>
+  </body>
+</html>

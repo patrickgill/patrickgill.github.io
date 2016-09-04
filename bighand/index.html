@@ -1,0 +1,116 @@
+<!-- 
+http://jsfiddle.net/KJW4E/754/
+
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title></title>
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <style>
+
+  #custom-cursor{
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    background-size: 0px 0px;
+    /*background-image: URL('images/hand.png');*/
+  }
+
+  </style>
+
+  <body class="noselect nocursor overlay">
+
+  <!-- <div class="nocursor"></div> -->
+
+    <div id="custom-cursor"></div>
+
+    <!-- Begin page content -->
+      <div class="container-fluid text-center">
+
+      <div id="header" class="text-center">
+        <!-- <h2 class="defaultcursor">Paste image <span class="doubleclick">😅</span></h2> -->
+        <small>Hello</small>
+      </div>
+
+      <div class="row center-block text-center" id="_"> 
+        <!-- <button id="btnSubmit" name="_singlebutton" class="btn btn-primary" />Resize</button>  -->
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <script>window.jQuery || document.write('<script src="../js/jquery.min.js"><\/script>')</script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="js/datauri.js"></script>
+<script type="text/javascript">//<![CDATA[
+
+//preload
+var hand = new Image();
+var hand_click = new Image();
+
+hand.onload = function(){
+  var height = hand.height;
+  var width = hand.width;
+
+  // #custom-cursor
+  $("#custom-cursor").css("height", height+"px");
+  $("#custom-cursor").css("width", width+"px");
+  $("#custom-cursor").css("background-size", width+"px " + height+"px");
+}
+
+hand.src = 'images/hand.png';
+hand_click.src = 'images/hand_click.png';
+
+$(document).on('mousemove', function(e){
+  $('#custom-cursor').css({
+    left:  e.pageX-6,
+    top:   e.pageY-8,
+    pointerEvents: 'none'
+  });
+});//]]>
+
+$(document).mousedown(function() {
+  // alert( "Handler for .mousedown() called." );
+  // $('#custom-cursor').css('background-image', 'url("../images/hand_click.png")';
+  $('#custom-cursor').css("background-image", "url("+hand_click.src+")");
+});
+
+$(document).mousedown(function() {
+  // alert( "Handler for .mousedown() called." );
+  // $('#custom-cursor').css('background-image', 'url("../images/hand_click.png")';
+  $('#custom-cursor').css("background-image", "url("+hand_click.src+")");
+});
+
+$(document).mouseup(function() {
+  $('#custom-cursor').css("background-image", "url("+hand.src+")");
+});
+
+// document.dispatchEvent(mouseEvent);
+
+//]]>
+</script>
+  </body>
+</html>

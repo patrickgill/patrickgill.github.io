@@ -34,28 +34,30 @@ https://images.google.com/
   <body>
 
     <!-- Begin page content -->
-    <div class="container-fluid">
+    <div class="container-fluid text-center">
 
-      <div id="header" class="row center-block">
+      <div id="header" class="row center-block text-center">
         <h2 class="defaultcursor">Image upload <span class="doubleclick">🤖</span></h2>
-        <span>Select an image for reverse image searching</span>
       </div>
 
-      <div class="row hidden" id="imagerow">
-        <img id="theimage" class="doubleclick center-block img-responsive" src="#" alt="Image" />
+      <div id="helper" class="row text-center">
+        <small>Select an image</small>
       </div>
 
-      <div class="row center-block" id="uploadrow">
-        <!-- <input id="uploadFile" placeholder="Choose File" disabled="disabled" /> -->
-        <div class="fileUpload btn btn-primary">
+      <div class="row hidden text-center" id="imagerow">
+        <p><img id="theimage" class="center-block img-responsive doubleclick doubletap" src="#" alt="Image" /></p>
+      </div>
+
+      <div class="row center-block text-center" id="uploadrow">
+        <p><span id="uploadFile"></span></p>
+        <div class="fileUpload btn btn-primary btn-lg">
           <span>Upload</span>
           <input id="uploadBtn" type="file" class="upload" name="filename" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" />
         </div>
-        <!-- <span id="uploadFile">Filename</span> -->
       </div>
 
-      <div class="row center-block hidden" id="searchrow"> 
-        <button id="searchBtn" name="singlebutton" class="btn btn-primary"  onchange="search();" />Search</button> 
+      <div class="row center-block hidden text-center" id="searchrow"> 
+        <button id="searchBtn" name="singlebutton" class="btn btn-primary btn-lg"  onchange="search();" />Search</button> 
       </div>
 
     </div>
@@ -69,42 +71,7 @@ https://images.google.com/
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
     <script>window.jQuery || document.write('<script src="../js/jquery.min.js"><\/script>')</script>
     <script src="../js/bootstrap.min.js"></script>
-    <script type='text/javascript'>
-      window.onload=function(){
-      }
-
-      function readURL(input) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-
-          reader.onload = function (e) {
-          $('#theimage')
-            .attr('src', e.target.result)
-            .show()
-          };
-
-          reader.readAsDataURL(input.files[0]);
-
-          $("#imagerow").removeClass('hidden');
-          $("#searchrow").removeClass('hidden');
-
-          // document.getElementById("uploadFile").value = document.getElementById("uploadBtn").value;
-          var Filename = document.getElementById("uploadBtn").value.split('/').pop().split('\\').pop();
-          // document.getElementById("uploadFile").value = Filename;
-          // $("#uploadFile").text(Filename);
-          $("#theimage").prop("alt", Filename);
-        }
-      }
-
-      // document.getElementById("uploadBtn").onchange = function () {
-      //   document.getElementById("uploadFile").value = this.value;
-      // };
-
-      $( ".doubleclick" ).dblclick(function() {
-        // alert( "Handler for .dblclick() called." );
-        $( "#uploadBtn" ).trigger( "click" );
-      });
-
-    </script>
+    <script src="js/upload.js"></script>
+    <script src="js/jquery-doubletap.js"></script>
   </body>
 </html>

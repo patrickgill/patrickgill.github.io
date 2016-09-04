@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>touchtest</title>
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body class="noselect">
+
+    <!-- <div id="custom-cursor"></div> -->
+    
+    <canvas id="canvas" class="disableinterpolation" width="0" height="1"></canvas>
+
+    <div id="info" class="noselect"></div>
+    <span id="touch" class="noselect"></span>
+
+  </body>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <script>window.jQuery || document.write('<script src="../js/jquery.min.js"><\/script>')</script>
+    <script src="../js/bootstrap.min.js"></script>
+<script type="text/javascript">//<![CDATA[
+
+var mousedown = false;
+var fillsize = 4;
+var colour1 = 'rgba(0,0,0,255)'; //'rgba(127,208,255,255)';//80ccff
+var colour2 = 'rgba(255,255,255,255)'; //'rgba(127,208,0,255)';
+var canvas = document.getElementById('canvas'),
+    canvasLeft = canvas.offsetLeft,
+    canvasTop = canvas.offsetTop,
+    ctx = canvas.getContext('2d'),
+    elements = [];
+
+// resize the canvas to fill browser window dynamically
+window.addEventListener('resize', resizeCanvas, false);
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  $(canvas).css('background-color', colour1);
+}
+
+function fillcell(x, y) {
+  var xcell = Math.floor(x / fillsize) * fillsize;
+  var ycell = Math.floor(y / fillsize) * fillsize;
+
+  // ctx.fillRect( x, y, 1, 1 );
+  // ctx.fillRect( x, y, fillsize, fillsize );
+  ctx.fillRect( xcell, ycell, fillsize, fillsize );
+}
+
+// Add event listener for move events.
+document.addEventListener('mousemove', function(event) {
+    var x = event.pageX - canvasLeft, y = event.pageY - canvasTop;
+    $('#info').text(x+','+y);
+    
+    if (mousedown) {
+      ctx.fillStyle = colour2;
+      fillcell(x,y);
+    }
+});
+
+document.addEventListener('mousedown', function(event) {
+    var x = event.pageX - canvasLeft, y = event.pageY - canvasTop;
+    mousedown = true;
+    ctx.fillStyle = colour2;
+    fill(x,y)
+    $('#info').css("font-weight","Bold");
+});
+
+document.addEventListener('mouseup', function(event) {
+  mousedown = false;
+  $('#info').css("font-weight","normal");
+});
+
+// Set up touch events for mobile, etc
+document.addEventListener("touchstart", function (e) {
+  mousedown = true;
+  mousePos = getTouchPos(canvas, e);
+  var touch = e.touches[0];
+  var mouseEvent = new MouseEvent("mousedown", {
+    clientX: touch.clientX,
+    clientY: touch.clientY
+  });
+  document.dispatchEvent(mouseEvent);
+  $('#touch').text(e.touches.length);
+}, false);
+
+document.addEventListener("touchend", function (e) {
+  var mouseEvent = new MouseEvent("mouseup", {});
+  mousedown = false;
+  document.dispatchEvent(mouseEvent);
+  $('#touch').text(e.touches.length);
+}, false);
+
+document.addEventListener("touchmove", function (e) {
+  var touch = e.touches[0];
+  // var mouseEvent = new MouseEvent("mousemove", {
+  //   clientX: touch.clientX,
+  //   clientY: touch.clientY
+  // });
+
+  $('#touch').text(e.touches.length);
+
+  for(var i=0; i < e.touches.length; i++) {
+      var touchId = e.touches[i].identifier;
+      var x       = e.touches[i].pageX;
+      var y       = e.touches[i].pageY;
+
+      $('#info').text(x+','+y);
+    
+      if (mousedown) {
+        ctx.fillStyle = colour2;
+        fillcell(x,y);
+      }
+
+      var mouseEvent = new MouseEvent("mousemove", {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      // document.dispatchEvent(mouseEvent);
+  }
+
+  // document.dispatchEvent(mouseEvent);
+}, false);
+
+// Get the position of a touch relative to the canvas
+function getTouchPos(canvasDom, touchEvent) {
+  var rect = canvasDom.getBoundingClientRect();
+  return {
+    x: touchEvent.touches[0].clientX - rect.left,
+    y: touchEvent.touches[0].clientY - rect.top
+  };
+}
+
+// Prevent scrolling when touching the canvas
+
+// document.addEventListener('ontouchstart', function(e) {e.preventDefault()}, false);
+// document.addEventListener('ontouchmove', function(e) {e.preventDefault()}, false);
+
+document.body.addEventListener("touchstart", function (e) {
+  mousedown = true;
+  if (e.target == canvas) {
+    e.preventDefault();
+  }
+}, false);
+document.body.addEventListener("touchend", function (e) {
+  mousedown = false;
+  if (e.target == canvas) {
+    e.preventDefault();
+  }
+}, false);
+document.body.addEventListener("touchmove", function (e) {
+  if(mousedown == true) {
+    if (e.target == canvas) {
+      e.preventDefault();
+    }
+  }
+}, false);
+
+resizeCanvas();
+
+</script>
+
+</html>

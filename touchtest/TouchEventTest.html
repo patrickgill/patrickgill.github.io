@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+	<title>TouchEvent Test</title>
+<style type="text/css">
+body {
+	background: #FFF;
+	font-family: monospace;
+}
+#mainCanvas {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -10;
+}
+#infoDiv {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	padding: 10px 25px;
+	z-index: 1;
+	overflow: hidden;
+}
+</style>
+<!-- script src="http://jsconsole.com/remote.js?TouchEventTestEmackey">< /script -->
+<script type="text/javascript">
+    "use strict";
+    var canvas, infoDiv;
+    var context;
+
+    var width = 10;  // These will be corrected later.
+    var height = 10;
+    var xRange, xMin, xMax, _xMid, yRange, yMin, yMax, _yMid, _yAspect;
+
+    var showGrid = true, manualClear = false;
+    var lastWasMouseMove = false, lastWasTouchMove = false;
+    var slideButtonDown = false;
+    var zoomButtonDown = false;
+    var stretchButtonDown = false;
+    var lastMouseX = 0;
+    var lastMouseY = 0;
+    var pi = Math.PI;
+    var infoLines = 1;
+    var idleTimer;
+
+    var styleList = ['#EDED00', '#ED0000', '#0000ED', '#ED00ED', '#ED8800', '#00EDED', '#000044'];
+
+	// For Mozilla Fennec    
+	document.multitouchData = true;
+
+    window.onload = function() {
+        showGrid = document.URL.indexOf("grid=n") < 0;
+        manualClear = document.URL.indexOf("clear=y") > 0;
+        infoDiv = document.getElementById('infoDiv');
+        canvas = document.getElementById('mainCanvas');
+        // Check for the canvas element, and get its context.
+        if (canvas && canvas.getContext) {
+            // You can only initialize one context per canvas.
+            context = canvas.getContext('2d');
+            if (context) {
+                // Got the context.  Now we can start drawing.
+                infoDiv.innerHTML = "waiting for events...";
+                setZoom(0, 0, 13);
+                grid();
+            }
+        }
+
+        window.onresize = resizeCanvas;
+
+        var eventTarget = infoDiv;
+        eventTarget.oncontextmenu = function() { return false; };
+        eventTarget.addEventListener('mousedown', HandleMouseDown, false);
+        eventTarget.addEventListener('mouseup', HandleMouseUp, false);
+        eventTarget.addEventListener('mousemove', HandleMouseMove, false);
+        eventTarget.addEventListener('mousewheel', HandleMouseWheel, false);
+        eventTarget.addEventListener('DOMMouseScroll', HandleMouseWheel, false); // Mozilla mouse wheel
+        eventTarget.addEventListener('mouseenter', HandleMouseEnter, false);
+        eventTarget.addEventListener('mouseleave', HandleMouseLeave, false);
+        eventTarget.addEventListener('mouseover', HandleMouseOver, false);
+        eventTarget.addEventListener('mouseout', HandleMouseOut, false);
+        eventTarget.addEventListener('touchstart', HandleTouchStart, false);
+        eventTarget.addEventListener('touchmove', HandleTouchMove, false);
+        eventTarget.addEventListener('touchend', HandleTouchEnd, false);
+        eventTarget.addEventListener('touchcancel', HandleTouchCancel, false);
+        eventTarget.addEventListener('MozTouchDown', DumpEvent, false);
+        eventTarget.addEventListener('MozTouchMove', HandleTouchMove, false);
+        eventTarget.addEventListener('MozTouchUp', HandleTouchEnd, false);
+        window.addEventListener('scroll', HandleScroll, false);
+    };
+
+    //
+    // Text functions
+    //
+    function AddLogText(msg) {
+        infoDiv.innerHTML = msg + "<br\/>" + infoDiv.innerHTML;
+        if (infoLines < 20) {
+            ++infoLines;
+        } else {
+            var pos = infoDiv.innerHTML.lastIndexOf("<br");
+            infoDiv.innerHTML = infoDiv.innerHTML.substring(0, pos);
+        }
+    }
+
+    function IdleFunc() {
+        AddLogText("&nbsp;idle");
+    }
+
+    //
+    // Mouse events
+    //
+    function HandleEvent(name, e) {
+        e.preventDefault();
+        var msg = name + " button " + e.button + " x " + e.clientX + " y " + e.clientY;
+        if (e.wheelDeltaX !== undefined) {
+            msg += " deltaX " + e.wheelDeltaX + " deltaY " + e.wheelDeltaY;
+        } else if (e.wheelDelta !== undefined) {
+            msg += " wheelDelta " + e.wheelDelta;
+        } else if (e.detail || e.axis) {
+			if (e.axis && (e.axis === e.VERTICAL_AXIS)) {
+				msg += " vertical";
+			} else if (e.axis && (e.axis === e.HORIZONTAL_AXIS)) {
+				msg += " horizontal";
+			}
+			msg += " detail " + e.detail;
+		}
+        AddLogText(msg);
+        DrawEvent(e);
+
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(IdleFunc, 5000);
+    }
+
+    function DrawEvent(e) {
+        grid();
+        context.fillStyle = context.strokeStyle = '#00ED00';
+        context.lineWidth = 3;
+
+        context.beginPath();
+        if (e.clientX !== undefined) {
+            context.arc(e.clientX, e.clientY, 25, 0, pi * 2.1);
+        }
+        context.stroke();
+        context.closePath();
+
+        context.font = 'normal 12px monospace';
+        context.fillText("mouse", e.clientX - 16, e.clientY);
+        
+        lastWasMouseMove = lastWasTouchMove = false;
+    }
+
+    function DumpEvent(e) {
+        var mostE = {};
+        try {
+            for (var key in e) {
+                if ((key.indexOf('Ele') == -1) && (key.indexOf('view') == -1) &&
+                    (key.indexOf('arget') == -1)) {
+                    mostE[key] = e[key];
+                }
+            }
+            infoDiv.innerHTML = JSON.stringify(mostE).replace(/\,/g, ',<br\/>');
+        }
+        catch (ex) {
+            mostE = {};
+            for (var key in e) {
+                mostE[key] = 0;
+            }
+            infoDiv.innerHTML = JSON.stringify(mostE);
+        }
+        infoDiv.innerHTML += "<br\/><br\/><br\/><br\/>";
+    }
+
+    function HandleMouseDown(e) {
+        if (!e) { e = window.event };
+        HandleEvent("mouse&nbsp; down", e);
+        //DumpEvent(e);
+    }
+
+    function HandleMouseUp(e) {
+        if (!e) { e = window.event };
+        HandleEvent("mouse&nbsp; &nbsp; up", e);
+    }
+
+    function HandleMouseMove(e) {
+        if (!e) { e = window.event };
+        if (!lastWasMouseMove) {
+            HandleEvent("mouse&nbsp; move", e);
+        } else {
+            DrawEvent(e);
+        }
+        lastWasMouseMove = true;
+    }
+
+    function HandleMouseWheel(e) {
+        if (!e) { e = window.event };
+        HandleEvent("mouse wheel", e);
+    }
+
+    function HandleMouseEnter(e) {
+        if (!e) { e = window.event };
+        HandleEvent("mouse enter", e);
+    }
+
+    function HandleMouseLeave(e) {
+        if (!e) { e = window.event };
+        HandleEvent("mouse leave", e);
+    }
+
+    function HandleMouseOver(e) {
+        if (!e) { e = window.event };
+        HandleEvent("mouse&nbsp; over", e);
+    }
+
+    function HandleMouseOut(e) {
+        if (!e) { e = window.event };
+        HandleEvent("mouse &nbsp; out", e);
+    }
+
+    // Scroll event, never happens
+    function HandleScroll(e) {
+        if (!e) { e = window.event };
+        HandleEvent("&nbsp;win scroll", e);
+    }
+
+    //
+    // Touchscreen events
+    //
+    function HandleTouchEvent(name, e) {
+        e.preventDefault();
+        var msg = name + " all " + e.touches.length + " target " +
+            e.targetTouches.length + " changed " + e.changedTouches.length;
+
+        AddLogText(msg);
+        DrawTouchEvent(e);
+
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(IdleFunc, 5000);
+    }
+
+    function DrawTouchEvent(e) {
+        grid();
+
+        context.lineWidth = 3;
+        context.font = 'normal 18px monospace';
+
+        var touches = (e.touches.length > 0) ? e.touches : e.changedTouches;
+        var len = touches.length;
+        for (var i = 0; i < len; ++i) {
+            var touch = touches[i];
+            context.fillStyle = context.strokeStyle = styleList[touch.identifier % styleList.length];
+
+            context.beginPath();
+            context.arc(touch.clientX, touch.clientY, 30, -0.1, pi * 2);
+            context.arc(touch.clientX, touch.clientY, 60, 0, pi * 2.1);
+            context.moveTo(touch.clientX - 80, touch.clientY);
+            context.lineTo(touch.clientX + 80, touch.clientY);
+            context.moveTo(touch.clientX, touch.clientY - 80);
+            context.lineTo(touch.clientX, touch.clientY + 80);
+            context.stroke();
+            context.closePath();
+
+            context.fillText(touch.identifier, touch.clientX + 5, touch.clientY - 60);
+        }
+        
+        lastWasMouseMove = lastWasTouchMove = false;
+    }
+
+    function HandleTouchStart(e) {
+        if (!e) { e = window.event };
+        HandleTouchEvent("touch start", e);
+        //DumpEvent(e.touches[0]);
+    }
+
+    function HandleTouchMove(e) {
+        if (!e) { e = window.event };
+        if (!lastWasTouchMove) {
+            HandleTouchEvent("touch &nbsp;move", e);
+        } else {
+            DrawTouchEvent(e);
+        }
+        lastWasTouchMove = true;
+    }
+
+    function HandleTouchEnd(e) {
+        if (!e) { e = window.event };
+        HandleTouchEvent("touch &nbsp; end", e);
+    }
+
+    function HandleTouchCancel(e) {
+        if (!e) { e = window.event };
+        HandleTouchEvent("touchcancel", e);
+    }
+
+    // This function is used to set a new position and zoom level.
+    //
+    function setZoom(xMid, yMid, new_X_range, new_Y_range) {
+        _xMid = xMid;
+        _yMid = yMid;
+        xRange = new_X_range;
+        xMin = xMid - (xRange * 0.5);
+        xMax = xMid + (xRange * 0.5);
+
+        if (!new_Y_range) {
+            yRange = xRange * canvas.clientHeight / canvas.clientWidth;
+        }
+        else {
+            yRange = new_Y_range;
+        }
+        yMin = yMid - (yRange * 0.5);
+        yMax = yMid + (yRange * 0.5);
+        try {
+            _yAspect = yRange / (xRange * canvas.clientHeight / canvas.clientWidth);
+        }
+        catch (ex) { _yAspect = 1; }
+    }
+
+    // This function helps resize the canvas.
+    //
+    function resizeCanvas() {
+        if (_yAspect) {
+            yRange = _yAspect * xRange * canvas.clientHeight / canvas.clientWidth;
+            yMin = _yMid - (yRange * 0.5);
+            yMax = _yMid + (yRange * 0.5);
+            grid();
+        }
+    }
+
+    // This is here to remove roundoff errors in the grid labels.
+    // I was seeing label names like 1.500000000000002.
+    //
+    function makeLabel(val) {
+        var label = Math.abs(Math.round(val * 10000000)).toString();
+        if (label.indexOf('e', 0) >= 0) {
+            label = val.toString();
+        }
+        else {
+            while (label.length < 8) {
+                label = "0" + label;
+            }
+            if (val < 0) {
+                label = "-" + label;
+            }
+            var dotPos = label.length - 7;
+            label = label.substr(0, dotPos) + "." + label.substr(dotPos);
+            while ((label[label.length - 1] == '0') && (label[label.length - 2] != '.')) {
+                label = label.substr(0, label.length - 1);
+            }
+        }
+        return label;
+    }
+
+    // Create a blue grid as a background
+    //
+    function grid() {
+        // Set the canvas' internal image size to match the actual
+        // size it takes on the web page, and clear canvas.
+        height = canvas.height = canvas.clientHeight;
+        width = canvas.width = canvas.clientWidth;
+
+        // Because we reset the width & height above, the canvas clears itself.
+        // This is required by the draft spec, otherwise we could clear manually:
+        if (manualClear) {
+            context.fillStyle = '#FFFFFF'; // white background
+            context.fillRect(0, 0, width, height);
+        }
+
+        if (!showGrid) { return; }
+
+        // Compute numeric range of 14 pixels, the smallest grid square.
+        var rangeMin = xRange * 14 / width;
+        // Find the first round number above that range
+        var gridRange = Math.pow(10, Math.ceil(Math.log(rangeMin) / Math.LN10));
+        // See if we can reduce it by half (0.5) or one-fifth (0.2)
+        if ((gridRange * 0.2) > rangeMin) {
+            gridRange *= 0.2;
+        }
+        else if ((gridRange * 0.5) > rangeMin) {
+            gridRange *= 0.5;
+        }
+
+        var lineColorOrigin = '#000000';
+        var lineColorUnlabeled = '#DDE5FF';
+        var lineColorLabeled = '#8888ED';
+
+        // Setup some drawing options
+        context.lineWidth = 1;
+        context.textBaseline = 'bottom';
+
+        // Draw the X grid lines
+        //
+        var index = Math.floor(xMin / gridRange);
+        var xGrid = index * gridRange;
+        for (; xGrid <= xMax; xGrid = index * gridRange) {
+            var xPos = (((xGrid - xMin) * width) / xRange);
+            if (Math.abs(index) < 1e-9) {
+                // Mark the origin of the grid
+                if (xPos > 20) {
+                    context.fillStyle = lineColorOrigin;
+                    context.font = 'bold 12px sans-serif';
+                    context.fillText("0.0", xPos + 2, height - 2);
+                }
+
+                context.strokeStyle = lineColorOrigin;
+            }
+            else if ((index % 5) != 0) {
+                // Draw an unlabeled grid line
+                context.strokeStyle = lineColorUnlabeled;
+            }
+            else {
+                // Draw and label a grid line
+                if (xPos > 20) {
+                    context.fillStyle = lineColorLabeled;
+                    context.font = 'normal 12px sans-serif';
+                    context.fillText(makeLabel(xGrid), xPos + 2, height - 2);
+                }
+
+                context.strokeStyle = lineColorLabeled;
+            }
+
+            // Draw the actual line
+            context.beginPath();
+            context.moveTo(xPos, 0);
+            context.lineTo(xPos, height);
+            context.stroke();
+            context.closePath();
+
+            ++index;
+        }
+
+        // Find the Y gridrange
+        var rangeMin = yRange * 14 / height;
+        var gridRange = Math.pow(10, Math.ceil(Math.log(rangeMin) / Math.LN10));
+        if ((gridRange * 0.2) > rangeMin) {
+            gridRange *= 0.2;
+        }
+        else if ((gridRange * 0.5) > rangeMin) {
+            gridRange *= 0.5;
+        }
+
+        // Draw the Y grid lines
+        //
+        index = Math.floor(yMin / gridRange);
+        var yGrid = index * gridRange;
+        for (; yGrid <= yMax; yGrid = index * gridRange) {
+            var yPos = (((yMax - yGrid) * height) / yRange);
+            if (Math.abs(index) < 1e-9) {
+                // Mark the origin of the grid
+                context.fillStyle = lineColorOrigin;
+                context.font = 'bold 12px sans-serif';
+                context.fillText("0.0", 2, yPos);
+
+                context.strokeStyle = lineColorOrigin;
+            }
+            else if ((index % 5) != 0) {
+                // Draw an unlabeled grid line
+                context.strokeStyle = lineColorUnlabeled;
+            }
+            else {
+                // Draw and label a grid line
+                context.fillStyle = lineColorLabeled;
+                context.font = 'normal 12px sans-serif';
+                context.fillText(makeLabel(yGrid), 2, yPos);
+
+                context.strokeStyle = lineColorLabeled;
+            }
+
+            // Draw the actual line
+            context.beginPath();
+            context.moveTo(0, yPos);
+            context.lineTo(width, yPos);
+            context.stroke();
+            context.closePath();
+
+            ++index;
+        }
+    }
+
+</script>
+</head>
+<body>
+
+<canvas id="mainCanvas" width="10" height="10">
+It looks like your browser does not support Canvas.
+Try FireFox, Chrome, Opera, or Safari instead.
+</canvas>
+
+<div id="infoDiv"></div>
+
+</body>
+</html>
