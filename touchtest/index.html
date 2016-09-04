@@ -40,10 +40,12 @@
     <script src="../js/bootstrap.min.js"></script>
 <script type="text/javascript">//<![CDATA[
 
+var fillsize = 20;
+// var colour1 = 'rgba(0,0,0,255)'; //'rgba(127,208,255,255)';//80ccff
+// var colour2 = 'rgba(255,255,255,255)'; //'rgba(127,208,0,255)';
+var colour1 = 'rgba(127,208,255,255)';//80ccff
+var colour2 = 'rgba(255,255,255,255)';
 var mousedown = false;
-var fillsize = 4;
-var colour1 = 'rgba(0,0,0,255)'; //'rgba(127,208,255,255)';//80ccff
-var colour2 = 'rgba(255,255,255,255)'; //'rgba(127,208,0,255)';
 var canvas = document.getElementById('canvas'),
     canvasLeft = canvas.offsetLeft,
     canvasTop = canvas.offsetTop,
@@ -58,6 +60,13 @@ function resizeCanvas() {
   canvas.height = window.innerHeight;
   $(canvas).css('background-color', colour1);
 }
+
+// switch colours
+$( document ).keypress(function( e ) {
+  if ( e.which == 120 ) { // on pressing x
+     colour1 = [colour2, colour2 = colour1][0];
+  }
+});
 
 function fillcell(x, y) {
   var xcell = Math.floor(x / fillsize) * fillsize;
@@ -132,12 +141,6 @@ document.addEventListener("touchmove", function (e) {
         ctx.fillStyle = colour2;
         fillcell(x,y);
       }
-
-      var mouseEvent = new MouseEvent("mousemove", {
-        clientX: touch.clientX,
-        clientY: touch.clientY
-      });
-      // document.dispatchEvent(mouseEvent);
   }
 
   // document.dispatchEvent(mouseEvent);
