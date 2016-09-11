@@ -28,7 +28,7 @@
     <canvas id="canvas" class="disableinterpolation" width="0" height="1"></canvas>
 
     <div id="info" class="noselect"></div>
-    <span id="touch" class="noselect"></span>
+    <div id="touch" class="noselect"></div>
 
   </body>
 
@@ -72,28 +72,26 @@ function fillcell(x, y) {
   var xcell = Math.floor(x / fillsize) * fillsize;
   var ycell = Math.floor(y / fillsize) * fillsize;
 
-  // ctx.fillRect( x, y, 1, 1 );
-  // ctx.fillRect( x, y, fillsize, fillsize );
   ctx.fillRect( xcell, ycell, fillsize, fillsize );
 }
 
 // Add event listener for move events.
-document.addEventListener('mousemove', function(event) {
-    var x = event.pageX - canvasLeft, y = event.pageY - canvasTop;
-    $('#info').text(x+','+y);
-    
-    if (mousedown) {
-      ctx.fillStyle = colour2;
-      fillcell(x,y);
-    }
-});
-
 document.addEventListener('mousedown', function(event) {
     var x = event.pageX - canvasLeft, y = event.pageY - canvasTop;
     mousedown = true;
     ctx.fillStyle = colour2;
     fillcell(x,y)
     $('#info').css("font-weight","Bold");
+});
+
+document.addEventListener('mousemove', function(event) {
+    var x = event.pageX - canvasLeft, y = event.pageY - canvasTop;
+    
+    if (mousedown) {
+      ctx.fillStyle = colour2;
+      fillcell(x,y);
+    }
+    $('#info').text(x+','+y);
 });
 
 document.addEventListener('mouseup', function(event) {
@@ -103,32 +101,18 @@ document.addEventListener('mouseup', function(event) {
 
 // Set up touch events for mobile, etc
 document.addEventListener("touchstart", function (e) {
-  mousedown = true;
   mousePos = getTouchPos(canvas, e);
   var touch = e.touches[0];
   var mouseEvent = new MouseEvent("mousedown", {
     clientX: touch.clientX,
     clientY: touch.clientY
   });
-  document.dispatchEvent(mouseEvent);
-  $('#touch').text(e.touches.length);
-}, false);
-
-document.addEventListener("touchend", function (e) {
-  var mouseEvent = new MouseEvent("mouseup", {});
-  mousedown = false;
+  mousedown = true;
   document.dispatchEvent(mouseEvent);
   $('#touch').text(e.touches.length);
 }, false);
 
 document.addEventListener("touchmove", function (e) {
-  // var touch = e.touches[0];
-  // var mouseEvent = new MouseEvent("mousemove", {
-  //   clientX: touch.clientX,
-  //   clientY: touch.clientY
-  // });
-  // document.dispatchEvent(mouseEvent);
-
   for(var i=0; i < e.touches.length; i++) {
       var touchId = e.touches[i].identifier;
       var x       = e.touches[i].pageX;
@@ -141,6 +125,14 @@ document.addEventListener("touchmove", function (e) {
         fillcell(x,y);
       }
   }
+}
+
+document.addEventListener("touchend", function (e) {
+  var mouseEvent = new MouseEvent("mouseup", {});
+  mousedown = false;
+  document.dispatchEvent(mouseEvent);
+  $('#touch').text(e.touches.length);
+}, false);
 
   $('#touch').text(e.touches.length);
 }, false);
@@ -155,7 +147,6 @@ function getTouchPos(canvasDom, touchEvent) {
 }
 
 // Prevent scrolling when touching the canvas
-
 // document.addEventListener('ontouchstart', function(e) {e.preventDefault()}, false);
 // document.addEventListener('ontouchmove', function(e) {e.preventDefault()}, false);
 

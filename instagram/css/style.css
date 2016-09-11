@@ -1,0 +1,75 @@
+h1 {
+  margin-top: 20px;
+}
+
+.row {
+  /*margin-bottom: 20px;*/
+}
+
+.row .row {
+  /*margin-top: 10px;*/
+  margin-bottom: 0;
+}
+
+#output {
+  text-align: left;
+}
+
+hr {
+  /*margin-top: 40px;*/
+  /*margin-bottom: 40px;*/
+}
+
+#theimage {
+  /*display:table;*/
+  /*width: 100%;*/
+  /*max-width:100%*/
+  /*height: auto;*/
+
+  max-width:100%; /*Ensure the width scales to the width of the parent container*/
+  width:auto; /* Not required, but sometimes is nice to ensure the width not being overridden by other factors like browser quirks */
+  height: auto;
+
+  padding-right: 14px;
+  padding-left: 14px;
+}
+
+input[type='file'] {
+  /*opacity:0    */
+  margin: 0 auto;
+}
+
+.fileUpload {
+  position: relative;
+  overflow: hidden;
+  margin: 10px;
+  align: center;
+}
+
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+.defaultcursor {
+  -webkit-user-select: none;
+  /*cursor: pointer;*/
+  cursor: default;
+}
