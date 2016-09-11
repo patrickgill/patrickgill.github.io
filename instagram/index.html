@@ -33,33 +33,28 @@ https://regex101.com/r/yN9pZ6/1
     <!-- Begin page content -->
     <div class="container-fluid text-center">
 
-      <div id="header" class="row center-block text-center">
+      <div class="row bottom-buffer center-block text-center" id="header">
         <h2 class="defaultcursor">Instagram <span class="doubleclick">😅</span></h2>
-      </div
+      </div>
 
-      <div class="row text-center" id="helper" >
-        <small>Paste share link</small>
+      <div class="row bottom-buffer text-center" id="helper">
+        <small>Paste share link here</small>
         <br />
         <input id="url" type="text" style="width:40%" />
       </div>
 
-      <div class="row text-center">
+      <div class="row bottom-buffer text-center">
         <input type="button" id="uploadBtn" value="Get video link" onclick="readURL();" />
       </div>
 
-      <div class="row hidden text-center" id="downloadrow">
-        <a id="download"></a>
+      <div class="row bottom-buffer hidden text-center" id="downloadrow">
+        <h3><a id="download"></a></h3>
+        <!-- add a copy button -->
       </div>
 
-      <br />
+<!--       <br />
       <div class="row text-center output">
         <pre id="output"></pre>
-      </div>
-
-      </div>
-
-<!--       <div class="row center-block hidden text-center" id="searchrow"> 
-        <button id="searchBtn" name="singlebutton" class="btn btn-primary btn-lg"  onchange="search();" />Search</button> 
       </div> -->
 
     </div>
@@ -89,8 +84,8 @@ function readURL() {
   //   $("#uploadFile").text(Filename);
   //   $("#theimage").prop("alt", Filename);
 
-  var instagram_url = 'https://www.instagram.com/p/BJ2vYiuB3PV/?taken-by=borrowedmemes'
-  // var anyorigininstagram_url = "http://anyorigin.com/get?url="+escape('https://www.instagram.com/p/BJ2vYiuB3PV/?taken-by=borrowedmemes')
+  // var instagram_url = 'https://www.instagram.com/p/BJ2vYiuB3PV/?taken-by=borrowedmemes'
+  var instagram_url = document.getElementById('url').value
 
     $.ajax({
       crossOrigin: true,
@@ -112,7 +107,7 @@ function readURL() {
           $('#downloadrow').removeClass('hidden');
           $('#download').text(video_url);
           $('#download').attr('href',video_url);
-          $('#download').text('Download mp4');
+          $('#download').text('Download MP4!');
 
           // console.log(data.match("?window\._sharedData = (.*)?;"))
       }
