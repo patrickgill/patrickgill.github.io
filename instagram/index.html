@@ -1,6 +1,7 @@
 <!--
+helpers
 https://regex101.com/r/yN9pZ6/1 
-
+http://jsonpath.com/
 
 -->
 
@@ -40,16 +41,16 @@ https://regex101.com/r/yN9pZ6/1
       <div class="row bottom-buffer text-center" id="helper">
         <small>Paste share link here</small>
         <br />
-        <input id="url" type="text" style="width:40%" />
+        <input id="url" type="text" style="width:480px" />
       </div>
 
       <div class="row bottom-buffer text-center">
-        <input type="button" id="uploadBtn" value="Get video link" onclick="readURL();" />
+        <input type="button" id="uploadBtn" value="Get download link" onclick="readURL();" />
       </div>
 
-      <div class="row bottom-buffer hidden text-center" id="downloadrow">
+      <div class="row bottom-buffer text-center hidden" id="downloadrow">
         <h3><a id="download"></a></h3>
-        <!-- add a copy button -->
+        <!-- copy button -->
       </div>
 
 <!--       <br />
@@ -91,28 +92,31 @@ function readURL() {
       crossOrigin: true,
       url: instagram_url,
       success: function(data) {
-          // console.log(data);
+        //window\._sharedData = (.*)?; // ig regex
+        var igjson = data.match('window\._sharedData = (.*)?;')[1]
+        var json = JSON.parse(igjson);
 
-          //window\._sharedData = (.*)?;
-          var igjson = data.match('window\._sharedData = (.*)?;')[1]
+        // $('#output').text(igjson);
+        // $('#output').text(igjson);
 
-          var obj = JSON.parse(igjson);
+        // var video_url = jsonPath(igjson, "$..entry_data.PostPage[0].media.video_url").toJSONString() //jsonPath
+        var video_url = json.entry_data.PostPage[0].media.video_url
+        var pic_url = json.entry_data.PostPage[0].media.display_src
 
-          // $('#output').text(igjson);
-          // $('#output').text(igjson);
-
-          // var video_url = jsonPath(igjson, "$..entry_data.PostPage[0].media.video_url").toJSONString() //jsonPath
-          var video_url = obj.entry_data.PostPage[0].media.video_url
-
+        if (json.entry_data.PostPage[0].media.is_video) {
           $('#downloadrow').removeClass('hidden');
-          $('#download').text(video_url);
           $('#download').attr('href',video_url);
           $('#download').text('Download MP4!');
-
-          // console.log(data.match("?window\._sharedData = (.*)?;"))
+        } else {
+          if (pic_url) {
+            $('#downloadrow').removeClass('hidden');
+            $('#download').attr('href',pic_url);
+            $('#download').text('Download!');
+          }
+        }
       }
     });
-
+}
 
   // $.getJSON(instagram_url, function(data){
   //   $('#output').html(data.contents);
@@ -121,7 +125,6 @@ function readURL() {
   // var el = document.createElement( 'html' );
   // // el.innerHTML = loadXMLDoc(document.getElementById("url").value)
   // el.innerHTML = loadXMLDoc(instagram_url)
-}
 
 // function loadXMLDoc(theURL)
 // {
