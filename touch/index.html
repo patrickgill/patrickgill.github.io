@@ -125,15 +125,13 @@ document.addEventListener("touchmove", function (e) {
         fillcell(x,y);
       }
   }
-}
+}, false);
+
 
 document.addEventListener("touchend", function (e) {
   var mouseEvent = new MouseEvent("mouseup", {});
   mousedown = false;
   document.dispatchEvent(mouseEvent);
-  $('#touch').text(e.touches.length);
-}, false);
-
   $('#touch').text(e.touches.length);
 }, false);
 
