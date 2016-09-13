@@ -1,0 +1,118 @@
+<!--
+https://vine.co/v/irMQ0jwBEjE
+
+helpers
+https://regex101.com/r/yN9pZ6/1
+
+http://jsonpath.com/
+
+the regex
+window.POST_DATA.\=.([\s\S]*?)\;
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Vine</title>
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/animate.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Begin page content -->
+    <div class="container-fluid text-center">
+
+      <div class="row bottom-buffer center-block text-center" id="header">
+        <h2 class="">Vine <span class="doubleclick">😁</span></h2>
+      </div>
+
+      <div class="row bottom-buffer text-center" id="helper">
+        <small>Paste link here</small>
+        <br />
+        <input id="url" type="text" style="width:50%" />
+      </div>
+
+      <div class="row bottom-buffer text-center">
+        <input type="button" id="uploadBtn" value="Get download link" onclick="readURL();" />
+      </div>
+
+      <div class="row bottom-buffer text-center hidden" id="downloadrow">
+        <h3><a class="" id="download"></a></h3>
+        <!-- copy button -->
+      </div>
+
+<!--       <br />
+      <div class="row text-center output">
+        <pre id="output"></pre>
+      </div>
+ -->
+    </div>
+
+    <script>window.jQuery || document.write('<script src="../js/jquery.min.js"><\/script>')</script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.ajax-cross-origin.min.js"></script>
+<script type="text/javascript">
+
+$.fn.extend({
+    animateCss: function (animationName) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        this.addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).removeClass('animated ' + animationName);
+        });
+    }
+});
+
+function readURL() {
+  var url = document.getElementById('url').value
+
+  $.ajax({
+    crossOrigin: true,
+    url: url,
+
+    success: function(data) {
+      var vine_re = /window.POST_DATA.\=.([\s\S]*?)\;/;
+
+      if ((m = vine_re.exec(data)) !== null) {
+        if (m.index === vine_re.lastIndex) {
+            vine_re.lastIndex++;
+        }
+
+        var json_obj = JSON.parse(m[1]);
+        var video_key = Object.keys(json_obj)[0];
+        var video_url = json_obj[video_key].videoUrls["0"].videoUrl; //["0"] is original quality
+
+        // console.dir(); // print objects in full
+
+        if (video_url) {
+          $('#downloadrow').removeClass('hidden');
+          $('#download').attr('href',video_url);
+          $('#download').text('Download!');
+
+          $('#download').addClass('animated fadeInDown');
+          // $('#download').animateCss('bounce');
+        }
+      }
+    }
+  });
+}
+
+</script>
+  </body>
+</html>

@@ -41,7 +41,7 @@ http://jsonpath.com/
       <div class="row bottom-buffer text-center" id="helper">
         <small>Paste share link here</small>
         <br />
-        <input id="url" type="text" style="width:480px" />
+        <input id="url" type="text" style="width:50%" />
       </div>
 
       <div class="row bottom-buffer text-center">
@@ -88,34 +88,34 @@ function readURL() {
   // var instagram_url = 'https://www.instagram.com/p/BJ2vYiuB3PV/?taken-by=borrowedmemes'
   var instagram_url = document.getElementById('url').value
 
-    $.ajax({
-      crossOrigin: true,
-      url: instagram_url,
-      success: function(data) {
-        //window\._sharedData = (.*)?; // ig regex
-        var igjson = data.match('window\._sharedData = (.*)?;')[1]
-        var json = JSON.parse(igjson);
+  $.ajax({
+    crossOrigin: true,
+    url: instagram_url,
+    success: function(data) {
+      //window\._sharedData = (.*)?; // ig regex
+      var igjson = data.match('window\._sharedData = (.*)?;')[1]
+      var json = JSON.parse(igjson);
 
-        // $('#output').text(igjson);
-        // $('#output').text(igjson);
+      // $('#output').text(igjson);
+      // $('#output').text(igjson);
 
-        // var video_url = jsonPath(igjson, "$..entry_data.PostPage[0].media.video_url").toJSONString() //jsonPath
-        var video_url = json.entry_data.PostPage[0].media.video_url
-        var pic_url = json.entry_data.PostPage[0].media.display_src
+      // var video_url = jsonPath(igjson, "$..entry_data.PostPage[0].media.video_url").toJSONString() //jsonPath
+      var video_url = json.entry_data.PostPage[0].media.video_url
+      var pic_url = json.entry_data.PostPage[0].media.display_src
 
-        if (json.entry_data.PostPage[0].media.is_video) {
+      if (json.entry_data.PostPage[0].media.is_video) {
+        $('#downloadrow').removeClass('hidden');
+        $('#download').attr('href',video_url);
+        $('#download').text('Download MP4!');
+      } else {
+        if (pic_url) {
           $('#downloadrow').removeClass('hidden');
-          $('#download').attr('href',video_url);
-          $('#download').text('Download MP4!');
-        } else {
-          if (pic_url) {
-            $('#downloadrow').removeClass('hidden');
-            $('#download').attr('href',pic_url);
-            $('#download').text('Download!');
-          }
+          $('#download').attr('href',pic_url);
+          $('#download').text('Download!');
         }
       }
-    });
+    }
+  });
 }
 
   // $.getJSON(instagram_url, function(data){
