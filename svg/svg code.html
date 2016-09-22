@@ -1,0 +1,56 @@
+<script>
+
+var s = Snap("#mainsvg");
+
+var someObj = {};
+var gs = s.selectAll('g');
+gs.forEach(function(el) {
+      var p = el.select('path');
+      someObj[ el.attr('id') ] = p.attr('d');
+});
+console.log( gs, someObj );
+
+
+
+//save via https://github.com/sampumon/SVG.toDataURL
+// Get the SVG element
+var svg = document.getElementById("design-1");
+
+svg.toDataURL("image/png", {
+    callback : function(data) {
+        // Convert image to 'octet-stream' (Just a download, really)
+        var image = data.replace("image/png", "image/octet-stream");
+        window.location.href = image;
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

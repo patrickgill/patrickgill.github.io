@@ -40,7 +40,7 @@ window.POST_DATA.\=.([\s\S]*?)\;
     <div class="container-fluid text-center">
 
       <div class="row bottom-buffer center-block text-center" id="header">
-        <h2 class="">Vine <span class="doubleclick">😁</span></h2>
+        <h2 class="">Vine <span>😁</span></h2>
       </div>
 
       <div class="row bottom-buffer text-center" id="helper">
@@ -53,9 +53,9 @@ window.POST_DATA.\=.([\s\S]*?)\;
         <input type="button" id="uploadBtn" value="Get download link" onclick="readURL();" />
       </div>
 
-      <div class="row bottom-buffer text-center hidden" id="downloadrow">
-        <h3><a class="" id="download"></a></h3>
-        <!-- copy button -->
+      <div class="row bottom-buffer text-center" id="downloadrow">
+        <h3><a id="download"></a></h3>
+        <span id="info"></span>
       </div>
 
 <!--       <br />
@@ -82,12 +82,20 @@ $.fn.extend({
 function readURL() {
   var url = document.getElementById('url').value
 
+  // $('#downloadrow').removeClass('hidden');
+  $('#download').addClass('hidden');
+
+  // $('#info').text('Loading');
+  $('#info').addClass('animated fadeInDown');
+
   $.ajax({
     crossOrigin: true,
     url: url,
 
     success: function(data) {
       var vine_re = /window.POST_DATA.\=.([\s\S]*?)\;/;
+
+      // $('#info').text('');
 
       if ((m = vine_re.exec(data)) !== null) {
         if (m.index === vine_re.lastIndex) {
@@ -101,16 +109,31 @@ function readURL() {
         // console.dir(); // print objects in full
 
         if (video_url) {
-          $('#downloadrow').removeClass('hidden');
+          
+          $('#download').removeClass('hidden');
           $('#download').attr('href',video_url);
           $('#download').text('Download!');
-
           $('#download').addClass('animated fadeInDown');
           // $('#download').animateCss('bounce');
+
+          $('#info').text('');
+
+        } else {
         }
+
+      } else {
+        $('#download').addClass('hidden');
+        $('#info').text('Error... video not found');
       }
+    },
+
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(textStatus, errorThrown);
+      $('#info').text('Error... check URL ');
     }
+
   });
+  
 }
 
 </script>

@@ -1,0 +1,28 @@
+https://soundcloud.com/oembed?url=https%3A%2F%2Fsoundcloud.com%2Ftimshiel%2Fambition&amp;format=xml
+
+
+
+<link rel="canonical" href="
+https://soundcloud.com/timshiel/ambition
+"><link rel="alternate" media="only screen and (max-width: 640px)" href="https://m.soundcloud.com/timshiel/ambition"><link rel="alternate" type="text/xml+oembed" 
+
+href="
+https://soundcloud.com/oembed?url=https%3A%2F%2Fsoundcloud.com%2Ftimshiel%2Fambition&amp;format=xml">
+
+
+<link rel="alternate" type="text/json+oembed" href="
+https://soundcloud.com/oembed?url=https%3A%2F%2Fsoundcloud.com%2Ftimshiel%2Fambition&amp;format=json
+
+
+"><link rel="author" href="/timshiel"><link rel="alternate" href="android-app://com.soundcloud.android/soundcloud/sounds:191397013"><link rel="alternate" href="ios-app://336353151/soundcloud/sounds:191397013">
+
+<meta name="application-name" content="SoundCloud">
+
+
+
+
+ <div itemscope itemprop="audio" itemtype="http://schema.org/AudioObject"><meta itemprop="embedUrl" content="https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F191397013&auto_play=false&show_artwork=true&visual=true&origin=schema.org" /><meta itemprop="height" content="400px" /></div>
+     
+ <div itemscope itemprop="audio" itemtype="http://schema.org/AudioObject"><meta itemprop="embedUrl" content="
+ https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F191397013&auto_play=false&show_artwork=true&visual=true&origin=schema.org
+ " /><meta itemprop="height" content="400px" /></div>

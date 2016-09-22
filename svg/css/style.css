@@ -2,26 +2,40 @@ h1 {
   margin-top: 20px;
 }
 
-.bottom-buffer { margin-bottom: 10px; }
-
-#output {
-  text-align: left;
-}
-
 hr {
   /*margin-top: 40px;*/
   /*margin-bottom: 40px;*/
-}
-
-#info {
-
-  font-style: italic;
 }
 
 input[type='file'] {
   /*opacity:0    */
   margin: 0 auto;
 }
+
+.bottom-buffer { margin-bottom: 10px; }
+
+#output {
+  text-align: left;
+}
+
+#svg {
+  /*display:table;*/
+  /*width: 100%;*/
+  /*max-width:100%*/
+  /*height: auto;*/
+
+  max-width:100%; /*Ensure the width scales to the width of the parent container*/
+  width:auto; /* Not required, but sometimes is nice to ensure the width not being overridden by other factors like browser quirks */
+  height: auto;
+
+  padding-right: 14px;
+  padding-left: 14px;
+}
+
+#info {
+  font-style: italic;
+}
+
 
 .fileUpload {
   position: relative;
