@@ -1,4 +1,4 @@
-<!-- 
+<!--
 http://jsfiddle.net/KJW4E/754/
 
  -->
@@ -37,15 +37,17 @@ http://jsfiddle.net/KJW4E/754/
       </div>
 
       <div class="text-center hidden" id="imagerow">
-        <!-- <img id="theimage" class="doubleclick center-block img-responsive" src="#" alt="Image" /> -->
-        <canvas style="border:1px solid grey;" id="thecanvas" width="300" height="300"></canvas>
-        <br />
-        <a id="download">Download as image</a>
+        <!-- <canvas style="border:1px solid grey;" id="thecanvas" width="300" height="300"></canvas> -->
+        <canvas id="thecanvas" class="hidden" width="300" height="300"></canvas>
+        <img id="pastedimage" class="doubleclick center-block img-responsive" src="#" alt="Image" />
+        <!-- <a id="download">Download as image</a> -->
       </div>
 
-      <div class="row center-block text-center" id="_"> 
-        <button id="btnSubmit" name="_singlebutton" class="btn btn-primary" />Resize</button> 
-      </div>
+			<br />
+
+<!--       <div class="row center-block text-center" id="_">
+        <button id="btnSubmit" name="_singlebutton" class="btn btn-primary" />Resize</button>
+      </div> -->
 
     </div>
 
@@ -61,28 +63,29 @@ http://jsfiddle.net/KJW4E/754/
     <script src="js/paste.js"></script>
     <script src="js/savecanvas.js"></script>
     <script src="js/datauri.js"></script>
+
 <script type="text/javascript">
   $(document).ready(function() {
       $("#btnSubmit").click(function(){
           // alert("button");
           // resize();
-          resize_canvas(thecanvas, 700,700);
-      }); 
+          resize_canvas(thecanvas, 640,640);
+      });
   });
 
 function resize_canvas( src, maxWidth, maxHeight ) {
   var canvas, context, cW, cH;
-  
+
   cW = src.width / 2;
   cH = src.height / 2;
-  
+
   if ( cW < maxWidth || cH < maxHeight ) return src;
-  
+
   canvas.width = cW;
   canvas.height = cH;
   context = canvas.getContext( '2d' );
   context.drawImage( src, 0, 0, cW, cH );
-  
+
   return resize_canvas( canvas, maxWidth, maxHeight );
 }
 

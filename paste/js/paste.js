@@ -2,7 +2,7 @@ var CLIPBOARD = new CLIPBOARD_CLASS("thecanvas", true);
 
 /**
  * image pasting into canvas
- * 
+ *
  * @param string canvas_id canvas id
  * @param boolean autoresize if canvas will be resized
  */
@@ -85,7 +85,7 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
     }
   };
 
-  //on keyboard press - 
+  //on keyboard press -
   this.on_keyboard_action = function (event) {
     k = event.keyCode;
     //ctrl
@@ -99,7 +99,7 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
         //let user paste into some input
         return false;
       }
-      
+
       if (ctrl_pressed == true && !window.Clipboard)
         pasteCatcher.focus();
     }
@@ -128,8 +128,29 @@ function CLIPBOARD_CLASS(canvas_id, autoresize) {
       }
       ctx.drawImage(pastedImage, 0, 0);
     };
-    pastedImage.src = source;
+    // pastedImage.src = source;
+
+    //copy image data into the img element
+    var imageElement = document.getElementById("pastedimage");
+    imageElement.src = source;
 
     $("#imagerow").removeClass('hidden');
+
   };
+}
+
+// unused
+function getImgFromCanvas () {
+  var canvas = document.getElementById("thecanvas"),
+      dataUrl = canvas.toDataURL(),
+      // imageElement = document.createElement('img');
+      imageElement = document.getElementById("pastedimage");
+  imageElement.src = dataUrl;
+
+  // Style your image here
+  // imageElement.style.width = '100px';
+  // imageElement.style.height = '100px';
+
+  // After you are done styling it, append it to the BODY element
+  // document.body.appendChild(imageElement);
 }
