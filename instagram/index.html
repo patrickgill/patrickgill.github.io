@@ -2,7 +2,6 @@
 helpers
 https://regex101.com/r/yN9pZ6/1
 http://jsonpath.com/
-
 -->
 
 <!DOCTYPE html>
@@ -43,7 +42,6 @@ http://jsonpath.com/
     <div id="downloadDiv" class="hidden">
     	<h3><a id="download"></a></h3>
     </div>
-    <!-- copy button -->
   </div>
 
   <div class="row bottom-buffer text-center" id="imageDiv">
@@ -57,7 +55,6 @@ http://jsonpath.com/
 
 </div>
 
-
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -69,16 +66,11 @@ http://jsonpath.com/
 window.onload=function(){
 }
 
-var loading = $('#loading');
-var $download = $('#downloadDiv').hide();
-
 $(document)
   .ajaxStart(function () {
     $('#downloadDiv').hide();
     $('#loading').text('Loading...');
     $('#loading').show();
-
-    // loading.value('Loading...')
   })
   .ajaxStop(function () {
     $('#downloadDiv').show();
@@ -87,7 +79,7 @@ $(document)
 
 function readURL() {
   // var instagram_url = 'https://www.instagram.com/p/BJ2vYiuB3PV/?taken-by=borrowedmemes'
-  // https://crossorigin.me/https://google.com
+  // https://crossorigin.me/https://www.instagram.com/p/BJ2vYiuB3PV/
   var instagram_url = document.getElementById('url').value
 
   $.ajax({
@@ -98,9 +90,6 @@ function readURL() {
       //window\._sharedData = (.*)?; // ig regex
       var igjson = data.match('window\._sharedData = (.*)?;')[1]
       var json = JSON.parse(igjson);
-
-      // $('#output').text(igjson);
-      // $('#output').text(igjson);
 
       // var video_url = jsonPath(igjson, "$..entry_data.PostPage[0].media.video_url").toJSONString() //jsonPath
       // var video_url = json.entry_data.PostPage[0].media.video_url
@@ -124,28 +113,13 @@ function readURL() {
 		    // loading.value(err.message);
 		    $('#loading').text('Error: '+err.message);
 			}
-
-       // else {
-
-       //  } else {
-	      // 	loading.show();
-	      // 	loading.value('Error');
-	      // }
     },
 
 		error: function (jqXHR, status, err) {
-		  // alert("Local error callback.");
-		  // loading.show();
 		  $('#loading').show();
-		  // loading.value('Error');
-
+		  $('#loading').text('Error: '+err.message);
 		}
   });
-}
-
-function showError () {
-  $('#loading').show();
-  $('#loading').text('Error...');
 }
 
 </script>
