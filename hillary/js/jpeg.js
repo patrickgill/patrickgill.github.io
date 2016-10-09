@@ -15,14 +15,14 @@ $(function() {
     //Slider init
     $("#slider-range-min").slider({
         range: "min",
-        value: 90,
+        value: 30,
         min: 1,
         max: 100,
         slide: function(event, ui) {
             // $("#jpeg_encode_quality").val(ui.value);
             $("#jpeg_encode_quality").html(ui.value+"%");
 
-            var compressJpegDebounced = debounce(compressJpeg, 20);
+            var compressJpegDebounced = debounce(compressJpeg, 100);
             compressJpegDebounced();
         },
 
@@ -155,6 +155,9 @@ $(function() {
 
     }
     var duration = new Date().getTime() - time_start;
+
+
+
 
     console.log("process finished...");
     console.log("Processed in: " + duration + "ms");

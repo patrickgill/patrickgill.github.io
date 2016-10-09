@@ -1,6 +1,6 @@
 <!--
 helpers
-https://regex101.com/r/yN9pZ6/1 
+https://regex101.com/r/yN9pZ6/1
 http://jsonpath.com/
 
 -->
@@ -29,16 +29,25 @@ http://jsonpath.com/
   <div class="row bottom-buffer text-center" id="helper">
     <small>Paste share link here</small>
     <br />
-    <input id="url" type="text" style="width:50%" />
+    <input id="url" type="text" style="width:50%" autofocus>
   </div>
 
   <div class="row bottom-buffer text-center">
-    <input type="button" id="uploadBtn" value="Get download link" onclick="readURL();" />
+    <input type="button" id="uploadBtn" value="Get download link" onclick="readURL();">
   </div>
 
-  <div class="row bottom-buffer text-center hidden" id="downloadrow">
-    <h3><a id="download"></a></h3>
+  <div class="row bottom-buffer text-center">
+	  <div id="loading">
+	    <span></span>
+	  </div>
+    <div id="downloadDiv" class="hidden">
+    	<h3><a id="download"></a></h3>
+    </div>
     <!-- copy button -->
+  </div>
+
+  <div class="row bottom-buffer text-center" id="imageDiv">
+    <img id="imageResult">
   </div>
 
 <!--       <br />
@@ -55,28 +64,36 @@ http://jsonpath.com/
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
 <script>window.jQuery || document.write('<script src="../js/jquery.min.js"><\/script>')</script>
 <script src="../js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/jquery.ajax-cross-origin.min.js"></script>
+<!-- <script type="text/javascript" src="js/jquery.ajax-cross-origin.min.js"></script> -->
 <script type="text/javascript">
 window.onload=function(){
 }
 
+var loading = $('#loading');
+var $download = $('#downloadDiv').hide();
+
+$(document)
+  .ajaxStart(function () {
+    $('#downloadDiv').hide();
+    $('#loading').text('Loading...');
+    $('#loading').show();
+
+    // loading.value('Loading...')
+  })
+  .ajaxStop(function () {
+    $('#downloadDiv').show();
+    $('#loading').hide();
+  });
+
 function readURL() {
-  //   $("#helper").addClass('hidden');
-  //   $("#imagerow").removeClass('hidden');
-  //   $("#searchrow").removeClass('hidden');
-
-  //   var Filename = document.getElementById("uploadBtn").value.split('/').pop().split('\\').pop();
-
-  //   // document.getElementById("uploadFile").value = Filename;
-  //   $("#uploadFile").text(Filename);
-  //   $("#theimage").prop("alt", Filename);
-
   // var instagram_url = 'https://www.instagram.com/p/BJ2vYiuB3PV/?taken-by=borrowedmemes'
+  // https://crossorigin.me/https://google.com
   var instagram_url = document.getElementById('url').value
 
   $.ajax({
-    crossOrigin: true,
-    url: instagram_url,
+    // crossOrigin: true,
+    url: "https://crossorigin.me/"+instagram_url,
+
     success: function(data) {
       //window\._sharedData = (.*)?; // ig regex
       var igjson = data.match('window\._sharedData = (.*)?;')[1]
@@ -86,22 +103,49 @@ function readURL() {
       // $('#output').text(igjson);
 
       // var video_url = jsonPath(igjson, "$..entry_data.PostPage[0].media.video_url").toJSONString() //jsonPath
-      var video_url = json.entry_data.PostPage[0].media.video_url
-      var pic_url = json.entry_data.PostPage[0].media.display_src
+      // var video_url = json.entry_data.PostPage[0].media.video_url
+      // var pic_url = json.entry_data.PostPage[0].media.display_src
 
-      if (json.entry_data.PostPage[0].media.is_video) {
-        $('#downloadrow').removeClass('hidden');
-        $('#download').attr('href',video_url);
-        $('#download').text('Download MP4!');
-      } else {
-        if (pic_url) {
-          $('#downloadrow').removeClass('hidden');
-          $('#download').attr('href',pic_url);
-          $('#download').text('Download!');
-        }
+      try {
+	      if (json.entry_data.PostPage[0].media.is_video) {
+	        $('#downloadDiv').removeClass('hidden');
+	        $('#download').attr('href',json.entry_data.PostPage[0].media.video_url);
+	        $('#download').text('Download MP4 video');
+	      } else {
+	      	if (typeof json.entry_data.PostPage[0].media.display_src !== 'undefined') {
+	          $('#downloadDiv').removeClass('hidden');
+	          $('#download').attr('href',json.entry_data.PostPage[0].media.display_src);
+	          $('#download').text('Download Photo');
+	        }
+	      }
       }
-    }
+      catch(err) {
+		    // document.getElementById("demo").innerHTML = err.message;
+		    // loading.value(err.message);
+		    $('#loading').text('Error: '+err.message);
+			}
+
+       // else {
+
+       //  } else {
+	      // 	loading.show();
+	      // 	loading.value('Error');
+	      // }
+    },
+
+		error: function (jqXHR, status, err) {
+		  // alert("Local error callback.");
+		  // loading.show();
+		  $('#loading').show();
+		  // loading.value('Error');
+
+		}
   });
+}
+
+function showError () {
+  $('#loading').show();
+  $('#loading').text('Error...');
 }
 
 </script>
